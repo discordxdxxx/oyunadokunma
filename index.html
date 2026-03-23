@@ -2,196 +2,143 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>#OYUNUMADOKUNMA</title>
+<title>Mini Discord</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
-
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Montserrat',sans-serif}
-
-body{
-  min-height:100vh;
-  background:linear-gradient(120deg,#7f00ff,#e100ff);
-  color:white;
-  overflow-x:hidden;
+body {
+  margin: 0;
+  display: flex;
+  height: 100vh;
+  font-family: Arial;
+  background: #36393f;
+  color: white;
 }
 
-.bg{
-  position:fixed;inset:0;
-  background:
-    radial-gradient(circle at 20% 20%,rgba(255,255,255,.15),transparent 40%),
-    radial-gradient(circle at 80% 70%,rgba(255,255,255,.12),transparent 40%);
-  animation:bgMove 12s infinite alternate;
-  z-index:-1;
-}
-@keyframes bgMove{to{transform:scale(1.1)}}
-
-header{text-align:center;padding:80px 20px 20px;animation:fadeDown 1.2s}
-header h1{font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900}
-header p{margin-top:15px;font-size:1.2rem;opacity:.9}
-
-.counter{
-  text-align:center;
-  margin:30px 0 10px;
-  font-size:1.4rem;
-  font-weight:700;
-  animation:fadeUp 1.2s;
-}
-.counter span{font-size:2.4rem;display:block;margin-top:10px}
-
-.platforms{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:25px;
-  padding:40px 10%;
+.sidebar {
+  width: 250px;
+  background: #2f3136;
+  padding: 15px;
 }
 
-.card{
-  background:rgba(255,255,255,.15);
-  backdrop-filter:blur(12px);
-  border-radius:20px;
-  padding:35px 20px;
-  text-align:center;
-  font-size:1.2rem;
-  font-weight:700;
-  animation:float 5s ease-in-out infinite;
-  transition:.4s;
-}
-.card:hover{transform:translateY(-12px) scale(1.05);background:rgba(255,255,255,.25)}
-@keyframes float{50%{transform:translateY(-10px)}}
-
-.warning{
-  max-width:800px;
-  margin:30px auto;
-  padding:0 20px;
-  text-align:center;
-  font-size:1.1rem;
-  line-height:1.7;
-  animation:fadeUp 1.4s;
+.chat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-.action{
-  display:flex;
-  justify-content:center;
-  margin:30px 0 50px;
+.topbar {
+  background: #202225;
+  padding: 15px;
+  font-weight: bold;
 }
 
-button{
-  background:linear-gradient(90deg,#ff512f,#f09819);
-  border:none;
-  padding:18px 45px;
-  font-size:1.2rem;
-  font-weight:700;
-  border-radius:50px;
-  cursor:pointer;
-  color:white;
-  box-shadow:0 15px 40px rgba(0,0,0,.35);
-  transition:.3s;
-  position:relative;
-  overflow:hidden;
+.messages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
 }
-button::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(120deg,transparent,rgba(255,255,255,.6),transparent);
-  transform:translateX(-100%);
-}
-button:hover::after{animation:shine 1s}
-@keyframes shine{to{transform:translateX(100%)}}
-button:hover{transform:scale(1.08)}
 
-.share{
-  display:none;
-  justify-content:center;
-  gap:15px;
-  animation:fadeUp .8s;
+.message {
+  background: #40444b;
+  padding: 8px;
+  margin: 5px 0;
+  border-radius: 5px;
+  animation: fadeIn 0.3s ease;
 }
-.share a{
-  background:rgba(255,255,255,.2);
-  padding:12px 18px;
-  border-radius:30px;
-  color:white;
-  text-decoration:none;
-  font-weight:700;
-  transition:.3s;
+
+input {
+  padding: 10px;
+  border: none;
+  outline: none;
+  width: 100%;
 }
-.share a:hover{background:rgba(255,255,255,.35)}
 
-footer{text-align:center;padding:25px;opacity:.75;font-size:.9rem}
+button {
+  margin-top: 5px;
+  padding: 10px;
+  background: #5865f2;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
 
-@keyframes fadeDown{from{opacity:0;transform:translateY(-40px)}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(40px)}}
+button:hover {
+  background: #4752c4;
+}
+
+.friend {
+  padding: 8px;
+  background: #40444b;
+  margin: 5px 0;
+  border-radius: 5px;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-20px); opacity: 0;}
+  to { transform: translateX(0); opacity: 1;}
+}
 </style>
 </head>
 
 <body>
-<div class="bg"></div>
 
-<header>
-  <h1>#OYUNUMADOKUNMA</h1>
-  <p>Dijital oyun platformlarına müdahaleye hayır</p>
-</header>
+<div class="sidebar">
+  <h2>Arkadaşlar</h2>
+  <div id="friends"></div>
 
-<div class="counter">
-  Toplam Destek
-  <span id="count">0</span>
+  <input id="friendInput" placeholder="Arkadaş ekle">
+  <button onclick="addFriend()">Ekle</button>
 </div>
 
-<section class="platforms">
-  <div class="card">STEAM</div>
-  <div class="card">EPIC GAMES</div>
-  <div class="card">PLAYSTATION STORE</div>
-  <div class="card">XBOX STORE</div>
-</section>
+<div class="chat">
+  <div class="topbar">Mini Discord</div>
 
-<section class="warning">
-  Dijital oyun platformlarına getirilecek kısıtlamalar,
-  milyonlarca oyuncunun erişimini ve dijital özgürlüğünü tehdit ediyor.
-</section>
+  <div id="messages" class="messages"></div>
 
-<div class="action">
-  <button id="supportBtn">DESTEK VER</button>
+  <input id="messageInput" placeholder="Mesaj yaz..." onkeydown="sendMessage(event)">
 </div>
-
-<div class="share" id="shareBox">
-  <a id="tw" target="_blank">Twitter</a>
-  <a id="wa" target="_blank">WhatsApp</a>
-</div>
-
-<footer>© 2026 | Oyunuma Dokunma</footer>
 
 <script>
-let count = localStorage.getItem("destek") || 0;
-count = parseInt(count);
-document.getElementById("count").innerText = count;
+let username = prompt("Kullanıcı adın:");
+if (!username) username = "Anonim";
 
-const btn = document.getElementById("supportBtn");
-const share = document.getElementById("shareBox");
+function sendMessage(e) {
+  if (e.key === "Enter") {
+    const input = document.getElementById("messageInput");
+    const msg = input.value;
 
-btn.onclick = () => {
-  if(localStorage.getItem("destekVerdi")) return;
-  count++;
-  localStorage.setItem("destek",count);
-  localStorage.setItem("destekVerdi",true);
-  document.getElementById("count").innerText = count;
-  share.style.display="flex";
+    if (!msg) return;
 
-  const text = encodeURIComponent(
-    "#OYUNUMADOKUNMA – Dijital oyun platformlarına müdahaleye hayır!"
-  );
-  const url = encodeURIComponent(location.href);
+    const div = document.createElement("div");
+    div.classList.add("message");
+    div.innerHTML = "<b>" + username + ":</b> " + msg;
 
-  document.getElementById("tw").href =
-    `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
+    document.getElementById("messages").appendChild(div);
 
-  document.getElementById("wa").href =
-    `https://wa.me/?text=${text}%20${url}`;
-};
+    input.value = "";
+  }
+}
 
-if(localStorage.getItem("destekVerdi")){
-  share.style.display="flex";
+function addFriend() {
+  const input = document.getElementById("friendInput");
+  const name = input.value;
+
+  if (!name) return;
+
+  const div = document.createElement("div");
+  div.classList.add("friend");
+  div.innerHTML = "❤️ " + name;
+
+  document.getElementById("friends").appendChild(div);
+
+  input.value = "";
 }
 </script>
 
